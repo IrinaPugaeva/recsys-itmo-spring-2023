@@ -28,4 +28,3 @@ class Contextual(Recommender):
         shuffled = list(recommendations)
         random.shuffle(shuffled)
         return shuffled[0]
-
