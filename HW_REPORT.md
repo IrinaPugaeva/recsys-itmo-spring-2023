@@ -13,7 +13,7 @@
 ## Последовательность действий для получения рекомендация и аб-тестирования:
  - Данные для обучения (данные с семинара на каггл загружены) https://www.kaggle.com/datasets/splav12341/mobod-dataset
  - Ноутбук для обучения `My_contextuel_recommender.ipynb`
- - Получаем файл с рекомендациями: `tracks_with_recs`
+ - Получаем файл с рекомендациями: `tracks_with_recs_HW.json` и кладем в `botify/data/tracks_with_recs_HW.json`
  - Идем в botify - здесь:
  ```sh
  docker-compose stop
@@ -39,9 +39,15 @@
 
  ![стало](https://github.com/IrinaPugaeva/MADE_recsys/blob/master/2.png)
 
+ ### Эксперимент HW - Contextual
+
+  ![HW - Contextual](https://github.com/IrinaPugaeva/MADE_recsys/blob/master/4.png)
+
 ## Изменения
 В исходном коде были сделаны следующие изменения:
 
  - порт был изменен с 5000 на 5001
 
  - добавлен файл setup.py для установки модуля sim
+
+ - изменения в модуле botify: изменены config.json, experiment.py, server.py

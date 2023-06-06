@@ -13,6 +13,7 @@ from botify.data import DataLogger, Datum
 from botify.experiment import Experiments, Treatment
 from botify.recommenders.indexed import Indexed
 from botify.recommenders.random import Random
+from botify.recommenders.contextual import Contextual
 from botify.track import Catalog
 
 import numpy as np
@@ -27,6 +28,7 @@ api = Api(app)
 tracks_redis = Redis(app, config_prefix="REDIS_TRACKS")
 artists_redis = Redis(app, config_prefix="REDIS_ARTIST")
 recommendations_redis = Redis(app, config_prefix="REDIS_RECOMMENDATIONS")
+hw_redis = Redis(app, config_prefix="REDIS_HW")
 
 data_logger = DataLogger(app)
 
@@ -36,6 +38,13 @@ catalog = Catalog(app).load(
 catalog.upload_tracks(tracks_redis.connection)
 catalog.upload_artists(artists_redis.connection)
 catalog.upload_recommendations(recommendations_redis.connection)
+
+catalog_hw = Catalog(app).load(
+    app.config["HW_TRACKS_CATALOG"], app.config["TOP_TRACKS_CATALOG"]
+)
+catalog_hw.upload_tracks(hw_redis.connection)
+catalog_hw.upload_artists(artists_redis.connection)
+catalog_hw.upload_recommendations(recommendations_redis.connection)
 
 parser = reqparse.RequestParser()
 parser.add_argument("track", type=int, location="json", required=True)
@@ -66,11 +75,11 @@ class NextTrack(Resource):
         args = parser.parse_args()
 
         # TODO Seminar 5 step 3: Wire CONTEXTUAL A/B experiment
-        treatment = Experiments.CONTEXTUAL.assign(user)
+        treatment = Experiments.HW_RECOMMENDER.assign(user)
         if treatment == Treatment.T1:
-            recommender = Indexed(tracks_redis, recommendations_redis, catalog)
+            recommender = Contextual(hw_redis.connection, catalog_hw)
         else:
-            recommender = Random(tracks_redis.connection)
+            recommender = Contextual(tracks_redis.connection, catalog)
 
         recommendation = recommender.recommend_next(user, args.track, args.time)
 
