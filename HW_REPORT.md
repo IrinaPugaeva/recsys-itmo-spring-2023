@@ -41,7 +41,7 @@
 
  ### Эксперимент HW - Contextual
 
- ![HW - Contextual](https://github.com/IrinaPugaeva/MADE_recsys/blob/hw/4.png)
+ ![HW - Contextual](https://github.com/IrinaPugaeva/recsys-itmo-spring-2023/blob/hw/4.png)
 
 ## Изменения
 В исходном коде были сделаны следующие изменения:
